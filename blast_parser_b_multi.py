@@ -20,7 +20,7 @@ for line in open(sys.argv[1]):
 	q_end = int(data[8])
 	e_value = float(data[-2])
 	bit_score = float(data[-1])
-	if e_value <= 1e-2:
+	if e_value <= 1e0:
 #		if "uncultured" not in hit_desc:
 		if dict1.has_key(query):
 			dict1[query].append([hit, hit_desc, identity, length, q_start, q_end, e_value, bit_score])
