@@ -1,3 +1,5 @@
+## input: anything resembles /Users/metagenomics/Documents/Databases/uniprotKB_taxa.txt
+## for virus, bacteria, archaea, and fungi
 import sys
 import os
 import re

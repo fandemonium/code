@@ -1,4 +1,5 @@
 #!/usr/bin/python
+## part 2 of cdhit cluster parsing. use on outputs from cdhit_clst_parser.py as ##input 
 
 import sys
 import os

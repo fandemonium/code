@@ -1,4 +1,5 @@
 #!/usr/bin/python
+## does exactly what cdhit_clst_parser.py and clst_abundance.py together do. 
 
 import sys
 import os

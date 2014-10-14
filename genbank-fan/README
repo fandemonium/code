@@ -1,0 +1,24 @@
+To construct phylogenetic tree based on 16S from the contig to CAZY abundance data:
+
+1. Find the most recent contig to CAZY abundance data (filtered: For each contig, across all soil aggregate fraction samples, at least one sample has to have a minimum abundance of 5 occurance; merged: with CAZY family abundance, taxaonomy, and hit ID's).
+
+2. Check your contig file (input file) and determine the column number for "hit ID". Modify get_gene_gbk_from_genbank.py line 9 accordingly (should not need to change because it's counting backwards).
+
+3. Run get_gene_gbk_from_genbank.py. This will pull gene information from genbank for each "hit ID." (This will generate individual gbk file with "hit ID's" as file names). To prevent the confusions of these gbk with the ones will be generated later, put them into a folder before proceeding.
+
+4. From these hit_id.gbk files, create a list of hit_id's, organism names, and genome accession numbers by using "get_accessionNumber_list_from_geneGBK.py." This step will need shell for loop. Double check and make sure that no file is missing in the generated list. Some gbk file acts funky (all gene should have an accession number, even though not all of them are genomes).  
+5. While all of the hit_ids in this list of hit_ids, organism names and accession number are unique, the access numbers might repeat. One can use the entire list to get the genome gbk (repeated accession number will simply be overwritten). However, this step is really time consuming and biopython usually runs into errors while retreiving the gbks. So it's worth the time to create another list of unique accession numbers alone. (unique_dbsource.py)
+
+4. Then from each gbk file, pull out accession number/dbsource for the genome using "get_full_genome_gbk.py." (Not all gene were sequenced fully, hence some would not have any 16S gene. This will also create individual folders from each accession number/dbsource.) 
+
+5. Use "parse-genbank2_16S.py" to pull out 16S information from genome gbk files. (This will give you organism names for each gene. Some will have multiple 16S and some will have none. Each dbsource number will have a 16S file.)
+
+6. To consolidate the 16S to one file, do:
+for i in *.16s.fa; do head -n 2 $i; done > all_16S_OnePerOrganism.fa
+(this picks the first 16S gene from each file.)
+
+7. If interested in fungi population, run "get_list_of_fungi_genome.py" on full genome gbk files to get a list of genome assession number with taxonomy domains.
+
+8. Use MEGA to construct maximum likelihood tree with bootstrap values (permutation = 999). To use the full organism names in MEGA trees, "_" will have to be used to replace spaces. Then export the tree file in nwk format. 
+
+9. If iTOL will be used to visualize the tree, the alternate organism names in parentheses will be recoganized by iTOL as a separate branch. So one should delete the parentheses in leave nodes.  

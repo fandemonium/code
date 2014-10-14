@@ -1,5 +1,5 @@
 #!/bin/bash
-
+## xander make wrapper to be used with MSU hpc.
 ## qsub -l walltime=hh:mm:ss,mem=60000mb -v targets=all,workdir=`pwd` path/to/make_wrapper.sh 
 
 module load HMMER/3.0

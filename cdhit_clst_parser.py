@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # to use: navigate to pfam_hmm_done/ana/ folder, do: for i in *; do python ~/Documents/Fan/scratch/code/cdhit_clst_parser.py /Users/metagenomics/Documents/Fan/scratch/xander_701/$i/nucl_cdhit.fasta.clstr > /Users/metagenomics/Documents/Fan/scratch/blast_desc/clstr_parsed/$i.x701.clstr.parsed; done#
 
+## input file: anything resembles /Users/metagenomics/Documents/Fan/scratch/xander_701/Asp/nucl_cdhit.fasta.clstr
 
 import sys
 import os

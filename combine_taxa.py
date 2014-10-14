@@ -1,7 +1,10 @@
 import sys
 import os
 
-##~/Documents/Fan/scratch/parsed_files/combined$ for i in *.combined; do python ~/Documents/Fan/code/combine_taxa.py ~/Documents/Databases/uniprotKB_id_prok.txt $i > ~/Documents/Fan/scratch/parsed_files/kingdom_combined_no_restriction/$i.kingdom; done 
+## input 1: /Users/metagenomics/Documents/Databases/uniprotKB_id_prok.txt
+## input 2: anything resembles /Users/metagenomics/Documents/Fan/scratch/parsed_files/combined/x701_Asp.combined
+
+##~/Documents/Fan/scratch/parsed_files/combined$ for i in *.combined; do python ~/Documents/Fan/scratch/code/combine_taxa.py ~/Documents/Databases/uniprotKB_id_prok.txt $i > ~/Documents/Fan/scratch/parsed_files/kingdom_combined/$i.kingdom; done
 
 dict = {}
 for line in open(sys.argv[1]):

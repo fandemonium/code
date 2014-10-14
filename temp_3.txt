@@ -1,0 +1,3 @@
+O42766	['Eukaryota', 'Fungi', 'Dikarya', 'Ascomycota', 'Saccharomycotina', 'Saccharomycetes', 'Saccharomycetales', 'mitosporic Saccharomycetales', 'Candida']
+Q8SW28	['Eukaryota', 'Fungi', 'Microsporidia', 'Unikaryonidae', 'Encephalitozoon']
+Q99002	['Eukaryota', 'Fungi', 'Dikarya', 'Ascomycota', 'Pezizomycotina', 'Sordariomycetes', 'Hypocreomycetidae', 'Hypocreales', 'Hypocreaceae', 'Trichoderma']

@@ -1,0 +1,11 @@
+To construct phylogenetic tree based on 16S from the contig to CAZY abundance data:
+
+1. Find the most recent contig to CAZY abundance data (filtered: For each contig, across all soil aggregate fraction samples, at least one sample has to have a minimum abundance of 5 occurance; merged: with CAZY family abundance, taxaonomy, and hit ID's).
+
+2. Check your contig file (input file) and determine the column number for "hit ID". Modify get_gene_gbk_from_genbank.py line 9 accordingly.
+
+3. For each "hit ID," pull gene information from genbank (This will create folders for individual gene file with "hit ID's" as folder names).
+
+4. Then from each gbk file, pull out accession number/dbsource for the genome using "get_full_genome_gbk.py." (Not all gene were sequenced fully, hence some would not have any 16S gene. This will also create individual folders from each accession number/dbsource.) 
+
+5. Use "parse-genbank2_16S.py" to pull out 16S information from genome gbk files. (This will give you organism names for each gene. To link back to the "hit ID," use "Linking_Organism_to_hitID.py.") 

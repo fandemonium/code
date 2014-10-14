@@ -1,4 +1,8 @@
 #!/usr/bin/python
+
+##input 1: anything resembles /Users/metagenomics/Documents/Fan/scratch/parsed_files/clstr_parsed/x701_Asp.clstr.parsed
+##input 2: anythong resembles /Users/metagenomics/Documents/Fan/scratch/parsed_files/blast_parsed/x701_Asp_nucl_cdhit.blast.desc.parsed
+
 #########
 ## see combine_clstr_labst_wrap.sh
 ###

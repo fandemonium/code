@@ -1,3 +1,4 @@
+## assign kingdoms to reference sequences
 import sys
 import os
 import re

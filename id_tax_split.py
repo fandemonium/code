@@ -1,3 +1,4 @@
+## test script for spliting a tab delimited file for its first column
 import os
 import sys
 

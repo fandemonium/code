@@ -1,3 +1,6 @@
+## input: anything resembles /Users/metagenomics/Documents/Databases/uniprotKB_taxa.txt
+## for fungi only
+
 import sys
 import os
 import re

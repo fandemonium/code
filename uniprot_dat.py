@@ -1,3 +1,5 @@
+##input: /Users/metagenomics/Documents/Databases/uniprot_tremble.dat or uniprot_sprot.dat
+
 import sys
 import os
 from Bio import SeqIO

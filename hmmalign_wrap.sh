@@ -1,4 +1,5 @@
-#pfam=(~/Documents/Fan/pfam_hmm/*/)
+## automation script for hmmalign, names have to match
+
 out=(~/Documents/Fan/pfam_hmm/*/ref_aligned.stk)
 hmm=(~/Documents/Fan/pfam_hmm/*/Peptidase_*.hmm)
 seq=(~/Documents/Fan/pfam_hmm/*/ref_*_1e-5.faa)
