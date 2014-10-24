@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+## adapted from Jordan Fish's code. it can also be used with alignment sequences with models, e.g., rdp alignment files. Wild card "*" could be used with for multiple input sequence files. 
+
 from Bio import SeqIO
 import numpy
 import sys
@@ -49,7 +51,7 @@ def main(mode, fasta_files):
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print "USAGE: calc_avg_length.py [--model-only|--unaligned] <fasta_file>..."
+		print "USAGE: seq_stats_fastq_gz.py [--model-only|--unaligned] <fasta_file>..."
 	else:
 		if sys.argv[1] == "--model-only":
 			main("model", sys.argv[2:])
