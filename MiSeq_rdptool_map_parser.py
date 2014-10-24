@@ -1,5 +1,8 @@
 import os
 import sys
+if len(sys.argv) != 2:
+	print "USAGE: python MiSeq_rdptool_map_parser.py ANL_MAPPING_FILE.txt > RDP_MAPPING_FILE.txt"
+	sys.exit()
 
 with open(sys.argv[1], 'r') as f:
 	next(f)
