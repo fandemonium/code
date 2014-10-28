@@ -1,6 +1,11 @@
-#!/macqiime/bin/python
+## adopted from Aaron Sharp's code. Modified to work with tab delimited file. 
 
 import sys
+
+if len(sys.argv) != 2:
+	print "USAGE: python revcomp_rdp_format.py RPD_MAPPING_FILE.txt > RPD_MAPPING_FILE_REV.txt"
+	sys.exit()
+
 fh = open(sys.argv[1])
 
 for lines in fh:
