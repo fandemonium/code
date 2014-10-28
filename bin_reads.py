@@ -5,15 +5,12 @@ import sys
 from Bio import SeqIO
 import string
 
-ids = []
-reads = []
 assemb = open(sys.argv[1], 'rU')
-for line in SeqIO.parse(assemb, "fastq"):
-        lexemes = line.id.rsplit(':', 1)
-	ids.append(lexemes[0])
-        reads.append(line.seq)
-dict_assemb = dict(zip(ids, reads))
-
+dict_assemb = SeqIO.to_dict(SeqIO.parse(assemb, "fastq"))
+for ID in dict_assemb:
+	ID_new = ID.rsplit(':', 1)[0]
+	dict_assemb[ID_new] = dict_assemb.pop(ID)
+#print len(dict_assemb)
 rootdir = "."
 lfiles = []
 for topdir, subdir, filelist in os.walk(rootdir):
@@ -22,7 +19,7 @@ for topdir, subdir, filelist in os.walk(rootdir):
 			lfiles.append(files)
 
 for each in lfiles:
-	fout = '%s_assem.fasta' % each.strip()
+	fout = '%s_assem.fastq' % each.strip()
         fp = open(fout, 'w')
 	f = open(each, 'rU')
 	l = []
@@ -33,8 +30,9 @@ for each in lfiles:
 			l.append(name)
 #	print len(l)
 	for item in l:
-		fp.write('>%s\n' % item) 
-		fp.write('%s\n' % dict_assemb[item])
+		SeqIO.write(dict_assemb, fp, 'fastq')
+#		fp.write('>%s\n' % item) 
+#		fp.write('%s\n' % dict_assemb[item])
 #	for files in filelist:
 #		if files.endswith("trimmed.fasta"):
 #			lfiles.append(files)
