@@ -13,7 +13,7 @@ def main(mode, fasta_files):
 	lengths = []
 
 	for fasta_file in fasta_files:
-		for seq in SeqIO.parse(gzip.open(fasta_file), "fastq"):
+		for seq in SeqIO.parse(open(fasta_file), "fastq"):
 			if seq.id[0] == "#":
 				continue
 
