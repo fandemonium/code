@@ -6,11 +6,14 @@ from Bio import SeqIO
 import string
 
 assemb = open(sys.argv[1], 'rU')
-dict_assemb = SeqIO.to_dict(SeqIO.parse(assemb, "fastq"))
-for ID in dict_assemb:
-	ID_new = ID.rsplit(':', 1)[0]
-	dict_assemb[ID_new] = dict_assemb.pop(ID)
-#print len(dict_assemb)
+dict_assemb = {}
+for records in SeqIO.parse(assemb, "fastq"):
+	records.id = records.id.rsplit(':', 1)[0]
+	records.description = records.description.rsplit(':', 1)[0]
+	records.name = records.name.rsplit(':', 1)[0]
+	#print records
+	dict_assemb[records.id] = records
+
 rootdir = "."
 lfiles = []
 for topdir, subdir, filelist in os.walk(rootdir):
@@ -30,7 +33,7 @@ for each in lfiles:
 			l.append(name)
 #	print len(l)
 	for item in l:
-		SeqIO.write(dict_assemb, fp, 'fastq')
+		SeqIO.write(dict_assemb[item], fp, 'fastq')
 #		fp.write('>%s\n' % item) 
 #		fp.write('%s\n' % dict_assemb[item])
 #	for files in filelist:
