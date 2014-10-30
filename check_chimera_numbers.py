@@ -36,6 +36,6 @@ for lines in assem:
 	assem_c = Counter(d_assem)
 
 compare = good_c + chim_c - assem_c
-print dict(good_c)
+#print dict(good_c)
 print dict(compare)
 #if output is "{}", everything sums up to original binned assembled reads. 
