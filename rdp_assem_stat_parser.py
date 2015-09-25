@@ -11,9 +11,11 @@ for lines in open(sys.argv[1], 'rU'):
 		seq_len = int(lexemes[5])
 		avg_Q = int(lexemes[-4])
 		overlap = int(lexemes[-3])	
-		if avg_Q >= 25: 
-	#		print seq_id
+		if avg_Q >= 25 and overlap >= 10 and seq_len>=250 and seq_len<=280: 
+#			print seq_id
 			l.append(overlap)
+	#		if seq_len == min(l):
+	#			print lines
 	#		if overlap == max(s_l):
 	#			s_ol.append(seq_len)
 #		elif seq_len >= 100 and avg_Q >= 27 and overlap > 40:
@@ -24,6 +26,6 @@ for lines in open(sys.argv[1], 'rU'):
 print "The shortest overlap is: %s" % min(l)
 print "The longest overlap is: %s" % max(l)
 print "The average overlap is: %s" % numpy.mean(l)
-print "The standard deviation of overlap is: %s" % numpy.std(l)
+#print "The standard deviation of overlap is: %s" % numpy.std(l)
 			
 

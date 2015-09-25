@@ -2,5 +2,5 @@
 
 for i in *; 
 do 
-	python ~/Documents/Fan/scratch/code/combine_desc_clstr.py /Users/metagenomics/Documents/Fan/scratch/parsed_files/clstr_parsed/x75_"$i".clstr.parsed /Users/metagenomics/Documents/Fan/scratch/parsed_files/blast_parsed/x75_"$i"_nucl_cdhit.blast.desc.parsed > /Users/metagenomics/Documents/Fan/scratch/parsed_files/combined/x75_"$i".combined
+	python ~/Documents/Fan/code/combine_desc_clstr.py /Users/metagenomics/Documents/Fan/spruce_meta_protease/blast_xander_q25/prot_merged_cdhit/counts/x704.$i.prot_cdhit.fasta.clstr.count /Users/metagenomics/Documents/Fan/spruce_meta_protease/blast_xander_q25/parsed/x704.$i.prot_cdhit.fasta.blast.desc.e-3 > /Users/metagenomics/Documents/Fan/spruce_meta_protease/blast_xander_q25/bdesc_counts/x704.$i.desc_counts.combined
 done

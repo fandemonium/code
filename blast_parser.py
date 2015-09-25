@@ -16,12 +16,15 @@ for line in open(sys.argv[1]):
 	length = int(data[4])
 	q_start = int(data[7])
 	q_end = int(data[8])
-	e_value = float(data[-2])
-	if "hydrogenase" in hit_desc and e_value <= 1e-5:
+	e_value = float(data[-3])
+	bit_score = float(data[-2])
+	taxa = data[-1]
+	if e_value <= 1e-5:
+#	if "hydrogenase" in hit_desc and e_value <= 1e-5:
 		if dict.has_key(query):
-			dict[query].append([hit, hit_desc, identity, length, q_start, q_end, e_value])
+			dict[query].append([hit, hit_desc, identity, length, q_start, q_end, e_value, taxa])
 		else:
-			dict[query] = [[hit, hit_desc, identity, length, q_start, q_end, e_value]]		
+			dict[query] = [[hit, hit_desc, identity, length, q_start, q_end, e_value, taxa]]		
 #print dict
 dict2={}
 for key in dict.keys():
@@ -36,4 +39,4 @@ for key in dict.keys():
 
 output = open(sys.argv[2], 'w')
 for key in dict2.keys():
-	output.write('%s\t%s\t%s\t%s\t%s\n' % (key, dict2[key][1], dict2[key][2], dict2[key][3], dict2[key][-1]))
+	output.write('%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s' % (key, dict2[key][0], dict2[key][1], dict2[key][2], dict2[key][3], dict2[key][-3], dict2[key][-2], dict2[key][-1]))

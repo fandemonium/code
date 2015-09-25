@@ -25,4 +25,4 @@ for n, line in enumerate(f):
 		#print n, line
 		#output.write('%s\t%s\t%s\n' % (i, id, contig))
 		print '%s\t%s\t%s' % (i, id, contig)
-print j
+#print j
