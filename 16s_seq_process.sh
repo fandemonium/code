@@ -1,0 +1,1 @@
+~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/XXXXX_R1_001.fastq.gz -r /PATH/TO/XXXXX_R2_001.fastq.gz 1> assembled_reads_250-280.fastq 2> assembled_reads_stats_250-280.txt
