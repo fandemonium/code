@@ -1,0 +1,9 @@
+# to use seqboot #
+1. align sequences with outgroups (sina)
+2. convert fasta to sequential form (change awk "1,10" based on the length of your id) 
+```
+awk '$1=substr($1"       ",1,10)"  "' FS="\n" OFS= RS=\> 16s_plus_1037_silva_aligned.fasta > test.fa 
+```
+3. count number of sequences (`grep -c ">" *.fasta`)
+4. count the length of sequences (`python length_summary.py *.fasta`)
+5. `vi test.fa` to add `the sequence count \t length of the longest seq (should be the same, because everything is aligned)`
