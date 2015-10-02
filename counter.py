@@ -1,17 +1,16 @@
+#parse id, find unique id and count how many times it showed up, then add the file name to it#
+#usage: for i in *.tips.txt; do python ~/Documents/repos/code/counter.py $i; done > clade_trait_table.txt 
+
 import sys
 import os
+from collections import Counter
 
-#def count_id(ids):
 tip = sys.argv[1]
-n = 1
-IDs={}
+IDs= Counter()
 for line in open(tip, 'rU'):
 	line = line.strip().split("|")
 	oid = line[0]
-	if oid not in IDs:
-		IDs[oid] = [n, tip.split(".")[0]]
-	else:
-		IDs[oid] = [n+1, tip.split(".")[0]]
+	IDs[oid] += 1
 
 for keys in IDs:
-	print "%s\t%s\t%s" %(keys, IDs[keys][0], IDs[keys][1])
+	print "%s\t%s\t%s" %(keys, IDs[keys], tip.split(".")[0])
