@@ -9,3 +9,7 @@ M60302
 
 # use curl or wget to get genbank files (rettype=gb) or fastas (rettype=fasta) #
 while read id; do curl "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id="$id"&rettype=gb&retmode=text" > "$id".gb; done < euk_ncbi_id.txt
+
+
+#### to get xml file for gid with both dna and protein seqs ####
+while read id; do curl "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id="$id"&rettype=xml&retmode=text" > "$id".xml; done < ../28.txt
