@@ -15,6 +15,8 @@
 
 #cd /mnt/data3/fan/pitfoaming/chimera_removal/de_novo
 #for i in *_otu1.fa; do usearch -uchime_ref $i -db /mnt/data3/qiime-db/gold.fa -uchimeout /mnt/data3/fan/pitfoaming/chimera_removal/ref/stats/"$i".uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras /mnt/data3/fan/pitfoaming/chimera_removal/ref/chimeras/"$i"_chimera.fa -nonchimeras /mnt/data3/fan/pitfoaming/chimera_removal/ref/good_otus/"$i"_otu2.fa; done
+## new one:
+for i in *.fa; do usearch -uchime_ref $i -db /mnt/data3/fan/RDPinfernal1.1Traindata/RDPClassifier_16S_trainsetNo15_rawtrainingdata/trainset15_092015.fa -strand plus -chimeras /mnt/data3/fan/pitfoaming/2_rdp_uchime/chime_ref/chimeras/"$i"_chimera.fa -nonchimeras /mnt/data3/fan/pitfoaming/2_rdp_uchime/chime_ref/ref_good/"$i"_ref_good.fa; done
 
 ###################################################################################
 ## if you want to use modeled alignment to pick otu (e.g., rdp tools), do this:  ##
