@@ -36,7 +36,7 @@ for i in *.fa; do usearch -uchime_ref $i -db /mnt/data3/fan/RDPinfernal1.1Traind
 
 #mkdir /mnt/data3/fan/pitfoaming/final_mapping /mnt/data3/fan/pitfoaming/final_mapping/mapping
 #cd /mnt/data3/fan/pitfoaming/all_pool_quality_trimmed
-#for i in *.5.fasta; do usearch -usearch_global $i -db /mnt/data3/fan/pitfoaming/chimera_removal/master_otus/final_otus.fa -strand plus -id 0.97 -uc /mnt/data3/fan/pitfoaming/final_mapping/mapping/$i.mapped.uc; done
+#for i in *.5.fasta; do usearch -usearch_global $i -db /mnt/data3/fan/pitfoaming/chimera_removal/master_otus/final_otus.fa -strand plus -id 0.985 -uc /mnt/data3/fan/pitfoaming/final_mapping/mapping/$i.mapped.uc; done
 
 #usearch -utax /mnt/data3/fan/pitfoaming/chimera_removal/master_otus/final_otus.fa -db /mnt/data3/qiime-db/rdp_16s.fa -taxconfs /mnt/data3/qiime-db/rdp_16s.tc -strand both -utaxout /mnt/data3/fan/pitfoaming/final_mapping/otu_taxa.txt
 
@@ -47,3 +47,8 @@ for i in *.fa; do usearch -uchime_ref $i -db /mnt/data3/fan/RDPinfernal1.1Traind
 
 python /mnt/data3/fan/code/uclust_py/uc2otutab.py /mnt/data3/fan/pitfoaming/final_mapping/combined_samples_with_file_names.txt > /mnt/data3/fan/pitfoaming/final_mapping/otu_table.txt
 
+###################################################################################
+## if use cd-hit, do this:        ##
+###################################################################################
+## use rdp dereplicated sequences
+cdhit-est -i combined_renamed_seqs.fa -o combined_renamed_seqs_cdhit.fasta -c 0.97 -M 8000 -T 3

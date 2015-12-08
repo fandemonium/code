@@ -98,35 +98,35 @@ cd $LOCATION
 #echo "prepare finalized sequences for alignment and clustering ..."
 #echo "cancatenate and dereplicate ..."
 #mkdir $LOCATION/3_"$NAME"_alignment_and_cluster $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment
-#cd $LOCATION/good_seqs
-#java -Xmx16g -jar $CLUST derep --unaligned -o $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs_derep.fasta $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.ids $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.samples *.fa
-
+#cd $LOCATION/2_rdp_uchime/final_good/good_seqs
+#java -Xmx24g -jar $CLUST derep --unaligned -o $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs_derep.fasta $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.ids $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.samples *.fa
+#
 #echo "align finalized sequences ..."
 #cd $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment
 #mkdir temp
-##split -l 100 all_seqs_derep.fasta
-#cmalign -o temp/temp_aln.stk -g --noprob $MODEL_16S < all_seqs_derep.fasta   
-#java -Xmx10g -jar $ALIGNMENTTOOLS alignment-merger temp all_seqs_derep_aln.fa
+###split -l 100 all_seqs_derep.fasta
+#cmalign -o temp/temp_aln.stk -g --noprob $MODEL_16S all_seqs_derep.fasta  
+#java -Xmx24g -jar $ALIGNMENTTOOLS alignment-merger temp all_seqs_derep_aln.fa
 
-#echo "Calculating distance matrix ..."
-#mkdir $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/distance_matrix
-#cd $LOCATION/3_"$NAME"_alignment_and_cluster/
-#java -Xmx24g -jar $CLUST dmatrix --id-mapping Derep_alignment/all_seqs.ids --in Derep_alignment/all_seqs_derep_aln.fa --outfile complete_linkage_cluster/distance_matrix/all_seqs_derep_aligned.fasta_matrix.bin --mask "#=GC_RF" -l 25 --dist-cutoff $DIST
+echo "Calculating distance matrix ..."
+mkdir $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/distance_matrix
+cd $LOCATION/3_"$NAME"_alignment_and_cluster/
+java -Xmx24g -jar $CLUST dmatrix --id-mapping Derep_alignment/all_seqs.ids --in Derep_alignment/all_seqs_derep_aln.fa --outfile complete_linkage_cluster/distance_matrix/all_seqs_derep_aligned.fasta_matrix.bin --mask "#=GC_RF" -l 25 --dist-cutoff 0.05
 
-#echo "Performing complete linkage clustering ..."
-#java -Xmx24g -jar $CLUST cluster --method complete --id-mapping Derep_alignment/all_seqs.ids --sample-mapping Derep_alignment/all_seqs.samples --dist-file complete_linkage_cluster/distance_matrix/all_seqs_derep_aligned.fasta_matrix.bin --outfile complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust --step $STEP
+echo "Performing complete linkage clustering ..."
+java -Xmx24g -jar $CLUST cluster --method complete --id-mapping Derep_alignment/all_seqs.ids --sample-mapping Derep_alignment/all_seqs.samples --dist-file complete_linkage_cluster/distance_matrix/all_seqs_derep_aligned.fasta_matrix.bin --outfile complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust --step $STEP
 
-#echo "Generating OTU table ..."
-#mkdir $LOCATION/R
-#cd $LOCATION
-#java -Xmx24g -jar $CLUST cluster_to_Rformat 3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust R/ $STEP $DIST
+echo "Generating OTU table ..."
+mkdir $LOCATION/R
+cd $LOCATION
+java -Xmx24g -jar $CLUST cluster_to_Rformat 3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust R/ $STEP $DIST
 
-echo "Classify representative sequences ..."
-cd $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster
+#echo "Classify representative sequences ..."
+#cd $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster
 #java -Xmx4g -jar $CLUST rep-seqs --id-mapping ../Derep_alignment/all_seqs.ids --one-rep-per-otu all_seqs_derep_aligned.fasta_complete.clust $DIST ../Derep_alignment/all_seqs_derep_aln.fa
 #java -Xmx4g -jar $CLASSIFIER classify -c $BOOTSTRAP_VALUE -f fixrank -o ../../R/otu_taxa_fixrank.txt all_seqs_derep_aligned.fasta_complete.clust_rep_seqs.fasta 
-echo "Classify each otu ..."
-java -Xmx4g -jar $CLUST rep-seqs -c --id-mapping $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.ids --one-rep-per-otu $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust $DIST $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs_derep_aligned.fasta
+#echo "Classify each otu ..."
+#java -Xmx4g -jar $CLUST rep-seqs -c --id-mapping $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs.ids --one-rep-per-otu $LOCATION/3_"$NAME"_alignment_and_cluster/complete_linkage_cluster/all_seqs_derep_aligned.fasta_complete.clust $DIST $LOCATION/3_"$NAME"_alignment_and_cluster/Derep_alignment/all_seqs_derep_aligned.fasta
   
 ### biom format ####
 #echo "Generating biom format file for R ..."
