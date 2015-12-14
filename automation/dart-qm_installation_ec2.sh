@@ -1,7 +1,7 @@
 echo "install softwares needed for high through-put primer design on a 64bit debian based linux"
 echo "Creating a directory to store all software packages needed ..."
 mkdir ~/softwares
-test -e ~/.bash_profile || touch ~/.bash_profil
+test -e ~/.bash_profile || touch ~/.bash_profile
 cd ~/softwares
 echo "Done!!!"
 
@@ -24,6 +24,7 @@ echo "Done!!!"
 
 ## java
 echo "Installing 64 bit java jdk and ant ..."
+sudo apt-get update
 sudo apt-get install ant openjdk-7-jdk
 echo "export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64" >> ~/.bash_profile
 source ~/.bash_profile
@@ -31,12 +32,11 @@ echo "Done!!!"
 
 ## RDPtools
 echo "Installing RDPtools ..."
+sudo apt-get install git make
 git clone https://github.com/rdpstaff/RDPTools
 cd RDPTools
 git submodule init
 git submodule update
 make
-echo "export PATH=~/softwares/RDPTools/:$PATH" >> ~/.bash_profile
-source ~/.bash_profile
 echo "Done!!"
 
