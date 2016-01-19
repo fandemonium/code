@@ -5,9 +5,9 @@ import re
 l = []
 for lines in open(sys.argv[1], 'rU'):
         lexeme = lines.strip().split("_")
-        tag = lexeme[-4]
+        name = '_'.join(lexeme[:-2])
 #        print tag 
-	if tag not in l:
-		l.append(tag)
+	if name not in l:
+		l.append(name)
 print '\n'.join(l)
 
