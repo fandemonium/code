@@ -11,9 +11,9 @@ for lines in open(sys.argv[1], 'rU'):
 		seq_len = int(lexemes[5])
 		avg_Q = int(lexemes[-4])
 		overlap = int(lexemes[-3])	
-		if avg_Q >= 25 and overlap >= 10 and seq_len>=250 and seq_len<=280: 
+		if avg_Q >= 25 and overlap >= 10: #and seq_len>=250 and seq_len<=280: 
 #			print seq_id
-			l.append(overlap)
+			l.append(seq_len)
 	#		if seq_len == min(l):
 	#			print lines
 	#		if overlap == max(s_l):
