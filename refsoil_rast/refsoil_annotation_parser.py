@@ -1,8 +1,15 @@
+#!/usr/bin/env python
+
 import sys
 import re
 import os
 import ijson
 
+if len(sys.argv) < 2:
+	print "USAGE:  refsoil_annotation_parser.py <subsystem_ontology.json> <subsystem_annotation_binding_file1> <subsystem_annotation_binding_file2> <...>"
+	sys.exit(1)
+
+ 
 ## read in subsystem ontology json file and find all level1 and level2. put them into seperate lists
 def get_l1(ss_ontology):
 	for item in ijson.items(open(ss_ontology), ''):

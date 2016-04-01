@@ -3,7 +3,8 @@
 #### 3 steps: 						  ##########
 #### 1. finalize RAST annotation table			  ##########
 #### 2. finalize RAST taxonomy table     		  ##########
-#### 3. plot using ggplot2 				  ##########
+#### 3. plot using ggplot2 and                            ##########
+####	generate tables 				  ##########
 ####################################################################
 library(plyr)
 library(ggplot2)
@@ -11,7 +12,7 @@ library(ggplot2)
 ####################################################################
 #### 1. finalize RAST annotation table			  ##########
 ####################################################################
-## determine the unique subsystem level 1 annotations and compare them to subsystem level 1 from Json file to eliminate inconsistant annotation namings
+## determine the unique subsystem level 1 annotations (T1) and compare them to subsystem level 1 from Json file to eliminate inconsistant annotation namings
 unique(rast$T1)
 rast$T1<-gsub("^Virulence$", "Virulence, Disease and Defense", rast$T1)
 rast$T1<-gsub("^Cell Division$", "Cell Division and Cell Cycle", rast$T1)
@@ -21,15 +22,15 @@ rast$T1<-gsub("^Phages, Prophages, Transposable elements$", "Phages, Prophages, 
 unique(rast$T1)
 
 ## rast annotations contain lots of duplicated information due to inconsistant naming that should be combined to eliminate false counts.
-## first, remove any duplicated rows where fig id (gene id) and gene names are repeated
-rast_derep_fig_gene<-rast[!duplicated(rast[, c("fig", "gene")]), ]
-## then, remove any duplicated rows where fig id and annotation descriptions are repeated
-rast_derep_fig_gene_desc<-rast_derep_fig_gene[!duplicated(rast_derep_fig_gene[, c("fig", "desc")]), ]
-## finally, remove any duplicated rows where fig id and subsystem level 1 (T1) annotation are repeated
-rast_derep_fig_gene_desc_T1<-rast_derep_fig_gene_desc[!duplicated(rast_derep_fig_gene_desc[, c("fig", "T1")]), ]
-## finally check the dimension of the annotation table
-## the number of rows should be much closer to the number of unique fig id
-dim(rast_derep_fig_gene_desc_T1)
+## for this study, the combination of unique gene id (fig) and T1 is what we want to look at.
+rast_fig_T1<-rast[!duplicated(rast[, c("fig", "T1")]), ]
+## finally check the dimension of the annotation table. "rast_fig_T1" is now the table to work on.
+dim(rast_fig_T1)
+
+## check the percentage of unique gene id (fig) that was annotated with multiple T1
+multi<-rast_fig_T1[duplicated(temp[, "fig"]), ]
+percent_uniq_gene_multi<-100*length(unique(multi$fig))/length(unique(rast_fig_T1$fig))
+percent_uniq_gene_multi
 
 
 ####################################################################
@@ -123,29 +124,61 @@ taxa[taxa$Phylum=="", ]
 ## write fixed taxa data.frame to file
 write.table(taxa, "refsoil_v1.1_rastID_to_gb_taxonomy_fixed.txt", sep="\t", row.names=F, quote=F)
 
-## merge taxa information onto rast annotations
-rast_derep_fig_gene_desc_T1_w_taxa<-merge(rast_derep_fig_gene_desc_T1, taxa, "rast_id")
-dim(rast_derep_fig_gene_desc_T1_w_taxa)
-dim(rast_derep_fig_gene_desc_T1)
+####################################################################
+#### 3. plot using ggplot2 				  ##########
+####################################################################
+## merge taxa information into rast annotations
+rast_fig_T1_taxa<-merge(rast_fig_T1, taxa, "rast_id")
+dim(rast_fig_T1_taxa)
+dim(rast_fig_T1)
 
-## because RAST subsystem level 1 contains categories that are not informative, such as "NA", "cluster based" etc, we need to construct a different data.frame for plotting
+## to plot, we create a new data frame to eliminate some of the columns that we don't need
 names(rast_derep_fig_gene_desc_T1_w_taxa)
-to_plot<-rast_derep_fig_gene_desc_T1_w_taxa[, c("rast_id", "fig", "TaxID", "T1", "Phylum", "strain")]
-
+to_plot<-rast_fig_T1_taxa[, c("rast_id", "fig", "TaxID", "T1", "Phylum", "strain")]
 ## consider each row as one gene count, do not use "1", which would make it a character
 to_plot$count<-1
-## condense data.frame by Phylum to identify the percentage of genes were identified with multiple annotations
-refsoil_phyla<-ddply(to_plot, .(Phylum), summarize, total_uniq_genes=length(unique(fig)), total_genes=sum(count))
-refsoil_phyla$percent_multifunction<-100*(refsoil_phyla$total_genes-refsoil_phyla$total_uniq_genes)/refsoil_phyla$total_uniq_genes
-## reorder Phylum by total # of unique genes in reverse order
-refsoil_phyla$Phylum<-reorder(refsoil_phyla$Phylum, -refsoil_phyla$total_uniq_genes)
 
-## condense data.frame by subsystem level 1, and eliminate unwanted categories
+#############################
+## Summary at phylum level ##
+#############################
+## condense data.frame by Phylum to identify the number of unique genes in each phylum, the number of genes with a uniq annotation, and the percentage of fig that were annotated into multiple T1.
+refsoil_phyla<-ddply(to_plot, .(Phylum), summarize, total_uniq_genes=length(unique(fig)), total_genes=sum(count))
+
+df<-data.frame()
+for (i in unique(rast_fig_T1_taxa$Phylum)){
+    temp<-subset(rast_fig_T1_taxa, Phylum==i)
+    multi<-temp[duplicated(temp[, "fig"]), ]
+    percent_uniq_gene_multi<-100*length(unique(multi$fig))/length(unique(temp$fig))
+    test<-data.frame(i, percent_uniq_gene_multi)
+    df<-rbind(df, test)
+}
+refsoil_phyla<-merge(refsoil_phyla, df, by.x="Phylum", by.y="i")
+
+## write the final refsoil summary at phylum level out to file:
+write.table(refsoil_phyla, "refsoil_derep_fig_T1.phyla_uniq_gene_multifunction.txt", sep="\t", quote=F, row.names=F)
+
+## Because many figs were assigned to multiple T1, the relative abundance of each phylum in RefSoil database should also include genes that were counted multiple times because of the annotation assignment.
+## For later plotting purpos, reorder Phylum by total # of genes in reverse order
+refsoil_phyla$Phylum<-reorder(refsoil_phyla$Phylum, -refsoil_phyla$total_genes)
+
+#############################
+## Summary at T1 level ##
+#############################
+## condense data.frame by subsystem level 1
 refsoil_T1<-ddply(to_plot, .(T1), summarize, total_genes=sum(count))
 refsoil_T1
+## identify the percent of genes that were assigned to a T1 (ie. not NA)
+100*refsoil_T1$total_genes[!is.na(refsoil_T1$T1)]/sum(refsoil_T1$total_genes)
+
+## write the refsoil summary at T1 level out to file:
+write.table(refsoil_T1, "rast_derep_fig_T1.T1_gene_counts.txt", sep="\t", row.names=F, quote=F)
+
+##################################
+## finalize data.frame to plot  ##
+##################################
+## because RAST subsystem level 1 contains categories that are not informative, such as "NA", "cluster based" etc, we eliminate the non-informative categories from plot.
 to_plot<-subset(to_plot, !grepl("Clustering-based subsystems|Experimental Subsystems|Experimental Subsystems|Miscellaneous", T1) & !is.na(T1))
 unique(to_plot$T1)
-
 
 ## Final rast plot is consisted of two pannels: A. the phylum distribution of subsystem level 1 genes; B. the phylum distribution of RefSoil genes (database)
 to_plot.a<-ddply(to_plot, .(T1, Phylum), summarize, gene_counts=sum(count))
@@ -160,10 +193,10 @@ to_plot.a$frame<-"A"
 to_plot.b<-refsoil_phyla
 ## Define the plotting frame B
 to_plot.b$frame<-"B"
-## Define an arbutrary T1 category for RefSoil so frame A and frame B can be combined into one data frame.
+## Define an arbitrary T1 category for RefSoil so frame A and frame B can be combined into one data frame.
 to_plot.b$T1<-"RefSoil"
 ## Calculate the percent gene abundance of each phya in RefSoil dataset 
-to_plot.b$percent<-100*(to_plot.b$total_uniq_genes/sum(to_plot.b$total_uniq_genes))
+to_plot.b$percent<-100*(to_plot.b$total_genes/sum(to_plot.b$total_genes))
 head(to_plot.b)
 ########### combine frame A and frame B ##########
 to_plot.final<-rbind(to_plot.a[, c("T1", "Phylum", "percent", "frame")], to_plot.b[, c("T1", "Phylum", "percent", "frame")])
@@ -173,9 +206,6 @@ dim(to_plot.a)
 dim(to_plot.b)
 
 
-####################################################################
-#### 3. plot using ggplot2 				  ##########
-####################################################################
 ## to plot with specific order, data frame factors must be reordered based on a previously defined order. 
 to_plot.final$Phylum<-factor(to_plot.final$Phylum, levels=levels(refsoil_phyla$Phylum))
 ## from refsoil_phyla, we can identify Proteobacteria is the most abundant phyla
@@ -208,3 +238,21 @@ pdf("refsoil_v1.1_rast_T1_phyla_sort_by_proteo_w_databasebias_facet.pdf", width=
 p8+guides(colour = guide_legend(ncol = 1, reverse=T), fill = guide_legend(ncol = 1, reverse=T))
 dev.off()
 
+
+##################################################################################################
+## generate a table showing:                                                                    ## 
+## 1. the number of unique phyla in each T1 category                                            ##
+## 2. the number of different phylum that is enriched in each T1 category                       ##
+##################################################################################################
+table_rast<-merge(to_plot.a, to_plot.b, "Phylum")
+table_rast_out<-ddply(table_rast, .(T1.x), summarize, phyla_detected=length(unique(Phylum)), phyla_enriched=sum(percent.x>percent.y))
+## sort the display order according to the plot order
+table_rast_out$T1.x<-factor(table_rast_out$T1.x, levels=levels(proteo_T1$T1))
+table_rast_out<-table_rast_out[order(table_rast_out$T1.x, -proteo_T1$percent), ]
+
+## write table to file:
+write.table(table_rast_out, "table_rast.fig_T1_derep.txt", sep="\t", row.names=F, quote=F)
+
+## identify the phylum names that were enriched in T1 with less than 3 enriched phyla.
+test<-table_rast[table_rast$T1.x %in% table_rast_out$T1.x[table_rast_out$phyla_enriched<=3],]
+ddply(test, .(T1.x), summarize, l=unlist(unique(Phylum[percent.x>percent.y])))
