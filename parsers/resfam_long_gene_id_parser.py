@@ -12,7 +12,12 @@ import re
 from Bio import Entrez
 from Bio import SeqIO
 
-l = []
+database = "nuccore"
+Entrez.email = "fan.michelle.yang@gmail.com"
+
+error_out = open("gene_id_not_found.txt", 'w')
+
+d = {}
 for lines in open(sys.argv[1], 'rU'):
 	line = lines.strip()
 	lexemes = re.split("\.|\|", line)
@@ -20,25 +25,23 @@ for lines in open(sys.argv[1], 'rU'):
 		ID = lexemes[1]
 	else:
 		ID = lexemes[0]
-	l.append(ID)
+	d[line]=ID
+print d
 
-database = "nuccore"
-Entrez.email = "fan.michelle.yang@gmail.com"
-
-error_out = open("gene_id_not_found.txt", 'w')
-missing = []
-for acc in l:
+missing = {}
+for key, acc in d.items():
 	try:
 		handle = Entrez.efetch(db = database, rettype = "gb", id = acc)
 		records = []
 		records.append(handle.read())
 		for item in records:
-			line = item.split("\n")
-			for i in line:
+			info = item.split("\n")
+			for i in info:
 				if "taxon" in i:
-					print acc, re.split(":|\"", i.strip())[-2] 
+					print "%s\t%s\t%s" % (key, acc, re.split(":|\"", i.strip())[-2])
 	except Exception:
-		missing.append(acc)
+		missing[key] = acc
 		pass
-error_out.write("\n".join(missing))	
-	
+
+for items in missing:	
+	error_out.write("%s\t%s" % (items, missing[items]))
