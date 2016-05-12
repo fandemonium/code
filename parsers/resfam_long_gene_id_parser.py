@@ -26,7 +26,6 @@ for lines in open(sys.argv[1], 'rU'):
 	else:
 		ID = lexemes[0]
 	d[line]=ID
-print d
 
 missing = {}
 for key, acc in d.items():
@@ -44,4 +43,4 @@ for key, acc in d.items():
 		pass
 
 for items in missing:	
-	error_out.write("%s\t%s" % (items, missing[items]))
+	error_out.write("%s\t%s\n" % (items, missing[items]))
