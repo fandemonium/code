@@ -6,13 +6,16 @@ import sys
 from Bio import SeqIO
 
 l_hits = []
-for lines in open(sys.argv[1], 'rU'):
-	line = lines.strip().split()
-	query_id = line[2]
-	if query_id not in l_hits:
-		l_hits.append(query_id)
-	else:
+for n, lines in enumerate(open(sys.argv[1], 'rU')):
+	if n == 0:
 		continue
+	else:
+		line = lines.strip().split()
+		query_id = line[0]
+		if query_id not in l_hits:
+			l_hits.append(query_id)
+		else:
+			continue
 
 for records in SeqIO.parse(open(sys.argv[2], 'rU'), 'fasta'):
 	hit_id = records.id.strip().split()[0]
