@@ -13,6 +13,7 @@ def parse_seqid(fasta):
 	return seq_d
 
 d = {}
+## read in organized blast table with percent alignment
 for n, lines in enumerate(open(sys.argv[1], 'rU')):
 	if n == 0:
 		continue
@@ -20,10 +21,11 @@ for n, lines in enumerate(open(sys.argv[1], 'rU')):
 		line = lines.strip().split("\t")
 		seq_id = line[1]
 		identity = float(line[2])
-		type = line[-3]
-		start = int(line[-7])
-		end = int(line[-6])
-		if identity >= 80:
+		perc_aln = float(line[-1])
+		type = line[-5]
+		start = int(line[-9])
+		end = int(line[-8])
+		if identity >= 75 and perc_aln >= 80:
 			if type not in d:
 				d[type] = [seq_id + ":" + seq_range(start, end)]
 			else:
