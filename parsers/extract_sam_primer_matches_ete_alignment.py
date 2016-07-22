@@ -19,5 +19,10 @@ for lines in open(sys.argv[1], 'rU'):
 	matches = line[11]
 	md = line[-2]
 	if matches == "AS:i:0":
-		print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (gene, sets, f_r, flag, pos, qual, cigar, matches, md)
+		if len(line) == 19:
+			gaps = line[14]
+			print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (gene, sets, f_r, flag, pos, qual, cigar, matches, gaps, md)
+		else:	
+			gaps = line[15]
+			print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (gene, sets, f_r, flag, pos, qual, cigar, matches, gaps, md)
 		
