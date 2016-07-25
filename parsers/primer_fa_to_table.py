@@ -1,3 +1,5 @@
+## usage:python ~/Documents/repos/code/parsers/primer_fa_to_table.py all_es_arg_primers.fa > all_es_arg_primers_truseq_and_conventional_pcr.table
+
 import sys
 import re
 from Bio import SeqIO
