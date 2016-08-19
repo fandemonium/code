@@ -18,15 +18,15 @@ cookie = cookielib.MozillaCookieJar(filename)
 handler = urllib2.HTTPCookieProcessor(cookie)
 opener = urllib2.build_opener(handler)
 post = urllib.urlencode({'login':'fyang@iastate.edu',
-                         'password':'####',
+                         'password':sys.argv[1],
                          'utf8':'%E2%9C%93',
                          'commit':'Sign+In'})
 response = opener.open('https://signon.jgi.doe.gov/signon/create', post)
 cookie.save(ignore_discard=True, ignore_expires=True)
 #response = opener.open('https://signon.jgi.doe.gov/contact_updated')
 
-IMG_File = open(sys.argv[1],"r")
-errorFile = open(sys.argv[2],"w")
+IMG_File = open(sys.argv[2],"r")
+errorFile = open(sys.argv[3],"w")
 header = IMG_File.next()
 header = header.strip()
 header = header.split('\t')
@@ -62,8 +62,8 @@ for line in IMG_File:
   saveDownloadbundle.write(downloadResponse.read())
   print "Completed Downloading: %s %.2f" % (folderName,(float(len(os.listdir("./")))/listSize)*100)
   #urllib2.HTTPError
-#response = opener.open('http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=IMG_638154510')
-#print response.read()
+response = opener.open('http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=IMG_638154510')
+print response.read()
 
 #savefile = open('cookieresult.gz', 'w')
 #savefile.write(response.read())
