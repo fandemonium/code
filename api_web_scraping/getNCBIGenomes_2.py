@@ -6,7 +6,7 @@ import os.path
 import sys
 from ftplib import FTP 
 import os
-ftp = FTP('ftp.ncbi.nlm.nih.gov','anonymous','dooley.shanek@gmail.com')
+ftp = FTP('ftp.ncbi.nlm.nih.gov','anonymous','fan.michelle.yang@gmail.com')
 
 genomeList = open(sys.argv[1],'r')
 errFile = open(sys.argv[2],'w')
