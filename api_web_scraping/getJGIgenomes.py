@@ -33,8 +33,8 @@ header = header.split('\t')
 listSize = 32000 #Temp variable just to keep track of where the download process is
 for line in IMG_File:
   line = line.strip()
-  lineArr = line.split('\t')
-  folderName = "IMG_" + lineArr[0].strip()
+  lineArr = line.split(':')
+  folderName = "IMG_" + lineArr[0].strip().split("_")[1]
   if os.path.exists(folderName):
 	print "%s already exists, skip" %(folderName)
 	errorFile.write("%s already exists, skip\n" %(folderName))
@@ -62,8 +62,8 @@ for line in IMG_File:
   saveDownloadbundle.write(downloadResponse.read())
   print "Completed Downloading: %s %.2f" % (folderName,(float(len(os.listdir("./")))/listSize)*100)
   #urllib2.HTTPError
-response = opener.open('http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=IMG_638154510')
-print response.read()
+#response = opener.open('http://genome.jgi.doe.gov/ext-api/downloads/get-directory?organism=IMG_638154510')
+#print response.read()
 
 #savefile = open('cookieresult.gz', 'w')
 #savefile.write(response.read())
