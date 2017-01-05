@@ -6,25 +6,21 @@ RDPTOOLS="/mnt/research/rdp/public/RDPTools/"
 mkdir $DIR/3_cdhit_clustering
 cd $DIR/3_cdhit_clustering
 mkdir renamed_seqs master_otus R
-#renameing sequences
+#renameing sequences, writing out mapping files, and one sequence files
 cd $DIR/2_quality_check/final_good_seqs
-for i in *.fa; do python $CODE/renaming_seq_w_short_sample_name.py $i $DIR/3_cdhit_clustering/renamed_seqs/"$i".renamed.fa; done
-
-#concatenate everything
-cd $DIR/3_cdhit_clustering/renamed_seqs
-cat *.fa > ../master_otus/combined_renamed_seqs.fa
+python $CODE/renaming_seq_w_short_sample_name.py $DIR/3_cdhit_clustering/renamed_seqs/sample_filename_map.txt $DIR/3_cdhit_clustering/renamed_seqs/sequence_name_map.txt > $DIR/3_cdhit_clustering/renamed_seqs/all_renamed_sequences.fa
 
 #clustering
 module load CDHIT/4.6.1
 cd $DIR/3_cdhit_clustering/master_otus
-cd-hit-est -i combined_renamed_seqs.fa -o combined_renamed_seqs_cdhit.fasta -c 0.97 -M 8000 -T 3
+cd-hit-est -i ../renamed_seqs/all_renamed_sequences.fa -o combined_renamed_seqs_cdhit.fasta -c 0.97 -M 8000 -T 3
 
 #make otu table
 python $CODE/cdhit_clstr_to_otu.py combined_renamed_seqs_cdhit.fasta.clstr > cdhit_otu_table_long.txt
 
 #convert otu table to wide format (otus as rows, samples as columns)
 module load R/2.15.1
-Rscript $CODE/convert_otu_table_long_to_wide_format.R cdhit_otu_table_long.txt cdhit_otu_table_wide.txt
+Rscript $CODE/convert_otu_table_long_to_wide_format.R cdhit_otu_table_long.txt ../R/cdhit_otu_table_wide.txt
 
 ##identify otu taxonomy
 module load Java/1.7.0_51
