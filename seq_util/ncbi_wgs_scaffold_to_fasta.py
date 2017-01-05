@@ -16,15 +16,15 @@ for lines in open(sys.argv[1], 'rU'):
 		os.mkdir(ncbi_org_acc)
 	if "-" in line[1]:
 		contig_acc_range = line[1].split("-")
-		start =  int(contig_acc_range[0][-2:])
-		end = int(contig_acc_range[-1][-2:])
+		start =  int(contig_acc_range[0][-6:])
+		end = int(contig_acc_range[-1][-6:])
 		l = range(start,end+1)
-		prefix = contig_acc_range[0][:-2]
+		prefix = contig_acc_range[0][:-6]
 	else:
 		contig = line[1].strip()
-		l = [int(contig[-2:])]
-		prefix = contig[:-2]
+		l = [int(contig[-6:])]
+		prefix = contig[:-6]
 	f = open(ncbi_org_acc + '/' + ncbi_org_acc + '.contigs.txt', 'w')
 	for seqs in l:
-		contigs = prefix + "%02d" % seqs
+		contigs = prefix + "%06d" % seqs
 		f.write('%s\n' % contigs)
