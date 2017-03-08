@@ -20,24 +20,35 @@ for line in gff:
 	if len(lexeme) < 9:
 		continue
 	else:
-		info = lexeme[-1].split(";")
-		locus_tag = info[1].split("=")[1]
-		if len(info) == 2:
+		info = lexeme[-1].strip().split(";")
+		gene_id = info[0].split("=")[1]
+		if "product=" not in lexeme[-1]:
 			product = "NA"
-			d[locus_tag] = [genome_oid, gene_type, start_pos, end_pos, strand, product]
+			d[gene_id] = [genome_oid, gene_type, start_pos, end_pos, strand, product]
 		else:
-			product = info[2].split("=")[1]
-			d[locus_tag] = [genome_oid, gene_type, start_pos, end_pos, strand, product]
+			matching = filter(lambda x: 'product=' in x, info)[0]
+			product = matching.split("=")[1]
+			d[gene_id] = [genome_oid, gene_type, start_pos, end_pos, strand, product]
 
 l = []
 for item in d:
 	if d[item][1] == "rRNA" and "16S" in d[item][-1] and "+" in d[item][-2]:
 		l.append(item)
+	elif len(l) == 0:
+		if d[item][1] == "rRNA" and "16S" in d[item][-1] and "-" in d[item][-2]:
+			l.append(item)
 
 ## only take the first 16S gene locus_tag
 ## the output header is in the format of:
 ## >img_genome_OID::gene_locus_tag::genedescription
-for records in fna:
-	if l[0] in records.description:
-		print ">"+genome_oid+"::"+l[0]+"::"+records.description
-		print records.seq
+l_err = []
+if len(l) >= 1:
+	for records in fna:
+		for gid in l:
+			if records.id == gid:
+				print ">"+genome_oid+"::"+gid+"::"+records.description
+				print records.seq
+else:
+	error = open(sys.argv[3], 'w')
+	l_err.append(genome_oid)
+	error.write("\n".join(l_err))
