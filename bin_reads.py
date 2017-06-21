@@ -7,7 +7,8 @@ import string
 
 assemb = open(sys.argv[1], 'rU')
 dict_assemb = {}
-for records in SeqIO.parse(assemb, "fastq"):
+for records in SeqIO.parse(assemb, "fasta"):
+#for records in SeqIO.parse(assemb, "fastq"):
 	records.id = records.id.rsplit(':', 1)[0]
 	records.description = records.description.rsplit(':', 1)[0]
 	records.name = records.name.rsplit(':', 1)[0]
@@ -33,7 +34,8 @@ for each in lfiles:
 			l.append(name)
 #	print len(l)
 	for item in l:
-		SeqIO.write(dict_assemb[item], fp, 'fastq')
+		SeqIO.write(dict_assemb[item], fp, 'fasta')
+#		SeqIO.write(dict_assemb[item], fp, 'fastq')
 #		fp.write('>%s\n' % item) 
 #		fp.write('%s\n' % dict_assemb[item])
 #	for files in filelist:
