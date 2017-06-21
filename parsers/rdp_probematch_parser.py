@@ -1,3 +1,8 @@
+# rdp probe match file is usually really big, do subset first. eg
+# grep -E "Escherichia|Enterococcus" 16s_515F806R_rdp_probematch.txt > FC_matches.txt
+#
+# usage: python ~/Documents/repos/code/parsers/rdp_probematch_parser.py FC_matches.txt > FC_matches_for_R.txt
+
 import sys
 import numpy
 
