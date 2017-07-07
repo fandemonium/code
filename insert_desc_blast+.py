@@ -16,6 +16,8 @@ for line in open(sys.argv[2]):
 	lexemes = line.strip().split("\t")
 	if len(lexemes) != 12:
 		continue
+	else:
+		ids = lexemes[1].split("|")[-2]
 
-	lexemes.insert(2, descriptions[lexemes[1]])
-	out.write("%s\n" % ("\t".join(lexemes)))
+		lexemes.insert(2, descriptions[ids])
+		out.write("%s\n" % ("\t".join(lexemes)))
