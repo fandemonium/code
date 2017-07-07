@@ -27,7 +27,7 @@ for (m in 1:length(tree_all)) {#loop through all trees
   }
 
 #rooting tree with first taxon - change if different root
-  root_tree<-root(tree,1,resolve.root=T)
+  root_tree<-root(tree, args[3], resolve.root=T)
 #replacing negative branch lengths - e.g., from PHYLIP
   root_tree$edge.length[root_tree$edge.length <= 0] =  0.00001
   subtree<-subtrees(root_tree, wait=FALSE)
