@@ -6,7 +6,7 @@ export LANG=C.UTF-8
 
 2. loop through different "context" (database of sequencing methods)
 ```
-while read context; do redbiom search metadata "soil" | redbiom fetch sample-metadata --output ${context//Pick_closed-reference_OTUs-/}.txt --context $context; done < ctx_list.txt 
+while read context; do redbiom search metadata "soil & europe where ph" | redbiom fetch sample-metadata --output ${context//Pick_closed-reference_OTUs-/}.txt --context $context; done < ctx_list.txt 
 ```
 
 ####ctx_list.txt:
