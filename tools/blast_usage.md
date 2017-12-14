@@ -1,6 +1,6 @@
-# make blast db
+# make blast db into specific directory with a specific name (-out)
 ```
-makeblastdb -in ../strain_16s.fa -parse_seqids -dbtype nucl -title n_soi
+makeblastdb -in strain_16s.fa -parse_seqids -dbtype nucl -out n_soi_db/n_soi
 ```
 
 # best hit 50 results
