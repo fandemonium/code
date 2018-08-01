@@ -1,4 +1,4 @@
-# usage: python ~/Documents/repos/code/seq_util/get_seq_islands.py usda123_vs110_unique_islands_1k.txt usda123_seq.txt > usda123_vs110_unique_islands_1k.fa
+# usage: python ~/Documents/repos/code/seq_util/get_seq_islands.py usda110_vs123_unique_islands_1k.txt usda110_seq.txt "usda110" > usda110_vs123_unique_islands_1k.fa
 # input usda123_seq.txt are fa file without contig headers (ie, > lines)
 
 import sys
@@ -22,6 +22,6 @@ for lines in f.readlines()[1:]:
 	line = lines.strip().split("\t")
 	left = np.abs(int(line[0]))
 	right = np.abs(int(line[1]))
-	print ">usda123_islands::" + str(left+1) + "-" + str(right-1)
+	print ">" + sys.argv[3] + "_islands::" + str(left+1) + "-" + str(right-1)
 	print extract_seqs(seq_txt, left, right-1)
 
