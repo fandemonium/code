@@ -1,3 +1,4 @@
+import re
 import sys
 from Bio import SeqIO
 
@@ -14,9 +15,10 @@ for n, lines in enumerate(open(sys.argv[1], 'rU')):
 			continue
 
 for records in SeqIO.parse(open(sys.argv[2], 'rU'), 'fasta'):
-	mock_id = records.description.strip().split()[5].rsplit("_", 1)[0]
+	desc = records.description.strip().split(",")[0]
+	mock_id = "K287DRAFT" + '' + re.split("K287DRAFT", desc)[-1].replace("_C", "")
 	if mock_id not in l_hits:
-		print ">" + mock_id + "\n" + records.seq
+		print ">" + desc + "\n" + records.seq
 #		continue
 #	else:	
 #		print ">" + mock_id + "\n" + records.seq	
