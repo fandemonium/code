@@ -1,0 +1,23 @@
+import sys
+import traceback
+
+def Die(Msg):
+	print(file=sys.stderr)
+	print(file=sys.stderr)
+
+	traceback.print_stack()
+	s = ""
+	for i in range(0, len(sys.argv)):
+		if i > 0:
+			s += " "
+		s += sys.argv[i]
+	print(s, file=sys.stderr)
+	print("**ERROR**", Msg, file=sys.stderr)
+	print(file=sys.stderr)
+	print(file=sys.stderr)
+	sys.exit(1)
+
+def Warning(Msg):
+	print(file=sys.stderr)
+	print(sys.argv, file=sys.stderr)
+	print("**WARNING**", Msg, file=sys.stderr)

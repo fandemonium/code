@@ -1,0 +1,27 @@
+import sys
+from Bio import SeqIO
+import operator
+
+def seq_to_dict(fnas, SEQ_LEN):
+	d = {}
+	for records in SeqIO.parse(fnas, 'fasta'):
+		new_records_id = records.id.strip().split("/")[1]
+		img_oid = new_records_id.split("::")[0]
+		new_desc = img_oid + "::" + "::".join(records.description.strip().split("::")[1:])
+		if len(records.seq) >= int(SEQ_LEN):
+			d[new_records_id] = [new_records_id, new_desc, records.seq]
+	return d
+
+
+no_genes_out = open(sys.argv[2], 'w')
+l = []  
+for f in sys.argv[3:]:
+        img_oid = f.strip().split(".")[0]
+        gene_records = seq_to_dict(open(f), sys.argv[1])
+        if len(gene_records) > 0:
+                longest_seq_key = max(iter(gene_records.items()), key=operator.itemgetter(1))[0]
+                print(">"+ gene_records[longest_seq_key][1] + "\n" +gene_records[longest_seq_key][-1])
+        else:
+                l.append(img_oid)
+no_genes_out.write("\n".join(l))
+
