@@ -10,7 +10,7 @@ ftp = FTP('ftp.ncbi.nlm.nih.gov','anonymous','fan.michelle.yang@gmail.com')
 
 genomeList = open(sys.argv[1],'r')
 errFile = open(sys.argv[2],'w')
-genomeList.next()
+next(genomeList)
 
 for line in genomeList:
     lineArr = line.strip().split("\t")
@@ -28,7 +28,7 @@ for line in genomeList:
             try:
                 if not os.path.exists(folderName+"/"+filename):
                     ftp.retrbinary('RETR ' + filename, open(folderName+"/"+filename,'wb').write)
-                    print "Downloaded",folderName+"/"+filename
+                    print("Downloaded",folderName+"/"+filename)
             except Exception as e:
                 errFile.write(folderName + ": genomic file not found, python err: " + str(e) + "\n")
                     

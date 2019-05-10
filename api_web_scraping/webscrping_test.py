@@ -6,5 +6,5 @@ status, response = http.request('http://www.nytimes.com')
 
 for link in BeautifulSoup(response, parseOnlyThese=SoupStrainer('a')):
     if link.has_attr('href'):
-        print link['href']
+        print(link['href'])
 
