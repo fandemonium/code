@@ -3,39 +3,51 @@
 #Parser for blast -m 8 or blast+ -m 6 and 7 output file with description inserted
 
 import sys
+import numpy
+import re
 
-##Query id,Subject id,Description, % identity, alignment length,mismatches,gap openings,q. start,q. end,s. start,s. end,e-value,bit score
-dict1={}
-for line in open(sys.argv[1]):
-	data = line.split('\t')
-#	print(data)
-	query = data[0]
-	hit = data[1]
-	#print hit
-	hit_desc = data[2]
-	#print hit_desc
-	identity = float(data[3])
-	length = int(data[4])
-	q_start = int(data[7])
-	q_end = int(data[8])
-	e_value = float(data[-2])
-	bit_score = float(data[-1])
-	if e_value <= 1e-3:
-		if "uncultured" not in hit_desc:
-			if query in dict1:
-				dict1[query].append([hit, hit_desc, identity, length, q_start, q_end, e_value, bit_score])
-			else:
-				dict1[query] = [[hit, hit_desc, identity, length, q_start, q_end, e_value, bit_score]]	
-#print len(dict1)
+##Query id, query start, query end, qurey length, Subject id, subject start, subject end, alignment length, % identity, e-value,bit score
 
-dict2={}
-for key in list(dict1.keys()):
-		if len(dict1[key]) > 1:
-			dict2[key] = dict1[key][0]
-		else:
-			dict2[key] = dict1[key][0]
-#print dict2
+d = {}
+for lines in open(sys.argv[1], 'rU'):
+	lexemes = lines.strip().split('\t')
+	asv_id = lexmes[0]
+	asv_len = float(lexemes[3])
+	matching_contig = lexemes[4]
+	aln_len = float(lexemes[7])
+	pident = float(lexemes[8])
+	adj_pident = pident * aln_len / asv_len
+	if asv_id not in d:
+		d[asv_id] = {matching_contig: adj_pident}
+	else:
+		d[asv_id].update({matching_contig: adj_pident})
 
-output = open(sys.argv[2], 'w')
-for key in list(dict2.keys()):
-	output.write('%s\t%s\t%s\t%s\t%s\t%s\t%s\n' % (key, dict2[key][0], dict2[key][1], dict2[key][2], dict2[key][3], dict2[key][-2], dict2[key][-1]))
+# strain desc file in the format of:
+# strain	species strain	contigs
+orgs = {}
+for strings in open(sys.argv[2], 'rU'):
+	string = string.strip().split("\t")
+	strain = string[1]
+	contig = string[2]
+	if strain not in orgs:
+		orgs[strain] =[contig]
+	else:
+		orgs[strin],append(contig)
+
+for asv in d:
+	l = []
+	for key, val in d[asv].items():
+		l.append(val)
+	if max(l) >= 95:
+		best = max(l)
+	l2 = []
+	for key, val in d[asv].items():
+		if val == best:
+			l2.append(key)
+	if len(l2) > 0:
+		l3 = []
+		for item in l2:
+			for strain, contig in orgs.items():
+				if item in contig:
+					l3.append(strain)
+		print(asv + '\t' + str(best) + '\t' + "|".join(l3))
