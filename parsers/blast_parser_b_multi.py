@@ -9,9 +9,9 @@ import re
 ##Query id, query start, query end, qurey length, Subject id, subject start, subject end, alignment length, % identity, e-value,bit score
 
 d = {}
-for lines in open(sys.argv[1], 'rU'):
+for lines in open(sys.argv[1], 'r'):
 	lexemes = lines.strip().split('\t')
-	asv_id = lexmes[0]
+	asv_id = lexemes[0]
 	asv_len = float(lexemes[3])
 	matching_contig = lexemes[4]
 	aln_len = float(lexemes[7])
@@ -34,4 +34,4 @@ for asv in d:
 			l2.append(key)
 	if len(l2) > 0:
 		for items in l2:
-			print(asv + '\t' + str(best) + '\t' + itmes)
+			print(asv + '\t' + str(best) + '\t' + items)
