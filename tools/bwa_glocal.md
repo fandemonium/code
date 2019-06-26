@@ -20,9 +20,17 @@
 	} else {
 	test <- data.frame(do.call('rbind', strsplit(as.character(bwa_m$cigar), "[A-Z")))
 	test <- mutate_all(test, function(x) as.numeric(as.character(x)))
-	test[, 3:4] <- c("first_len", "match_len", "first_index", "match_index")
+	test[, 3:4] <- data.frame(do.call('rbind', gregexpr(pattern="[A-Z]", as.character(bwa_m$cigar))))
+	names(test) <- c("first_len", "match_len", "first_index", "match_index")
+	
+	test$first_len <- ifelse(test$first_index == test$match_index, 0, as.numeric(as.character(test$first_len)))
+	test$match_len <- as.numeric(as.character(test$match_len))
+	
+	bwa_m <- data.frame(bwa_m, test)
+	
+	bwa_m_perfect <- subset(bwa_m, clip_index==1 | first_index==match_index) %>% filter(match_len>= 100)
 	##
-	## then one can adjust the length of the overhang and match as needed"
+	## then one can adjust the length of the overhang and match as needed or save to file"
 	```
 
 
