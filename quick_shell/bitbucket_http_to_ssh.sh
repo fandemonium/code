@@ -1,3 +1,5 @@
+# usage: cd <repo>; bash /PATH/bitbucket_http_to_ssh.sh
+
 http_to_ssh(){
 	echo ""
 	echo "checking for $1..."
