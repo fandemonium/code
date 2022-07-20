@@ -8,7 +8,7 @@ gene=$2
 
 while read line
 do
-	echo "esearch -db taxonomy -query '"$line [LNGE]"' | elink -target nuccore | efetch -format docsum | xtract -pattern DocumentSummary -element Id Title Slen | grep '"$gene"' > ${line// /_}.gene.list"
+	echo "esearch -db taxonomy -query '"$line [LNGE]"' | elink -target nuccore | efetch -format docsum | xtract -pattern DocumentSummary -element Gi Title Slen | grep '"$gene"' > ${line// /_}.gene.list"
 done < $org_list > get_gene_id.sh
 
 #`$gene`: ITS: "internal transcribed spacer"
